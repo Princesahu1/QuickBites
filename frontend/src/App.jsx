@@ -1,6 +1,6 @@
-// src/App.jsx
 import React, { Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import AuthProvider from "./context/AuthContext";
 import CartProvider from "./context/CartContext";
 import OrdersProvider from "./context/OrdersContext";
@@ -10,6 +10,7 @@ import ResetPassword from "./pages/ResetPassword";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import PageTransition from "./components/PageTransition";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -24,46 +25,49 @@ import OrderTracking from "./pages/OrderTracking";
 import { Toaster } from "react-hot-toast";
 
 export default function App() {
+  const location = useLocation();
+
   return (
     <AuthProvider>
       <CartProvider>
         <OrdersProvider>
           <Navbar />
-          <main className="min-h-screen">
+          <div className="flex flex-col min-h-screen">
             <Suspense
-              fallback={<div className="p-8 text-center">Loading…</div>}
+              fallback={<div className="p-8 text-center"><div className="animate-pulse h-10 w-10 bg-coral-500 rounded-full mx-auto shadow-lg shadow-coral-500/20" /></div>}
             >
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/menu" element={<Menu />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/verify-email" element={<VerifyEmail />} />
-                <Route path="/verify-email" element={<VerifyEmail />} />
-                <Route path="/orders" element={<OrderTracking />} />
-                <Route
-                  path="/checkout"
-                  element={
-                    <ProtectedRoute>
-                      <Checkout />
-                    </ProtectedRoute>
-                  }
-                />
+              <AnimatePresence mode="wait">
+                <Routes location={location} key={location.pathname}>
+                  <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+                  <Route path="/menu" element={<PageTransition><Menu /></PageTransition>} />
+                  <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
+                  <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+                  <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+                  <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
+                  <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+                  <Route path="/verify-email" element={<PageTransition><VerifyEmail /></PageTransition>} />
+                  <Route path="/orders" element={<PageTransition><OrderTracking /></PageTransition>} />
+                  <Route
+                    path="/checkout"
+                    element={
+                      <ProtectedRoute>
+                        <PageTransition><Checkout /></PageTransition>
+                      </ProtectedRoute>
+                    }
+                  />
 
-                <Route
-                  path="/admin"
-                  element={
-                    <AdminRoute>
-                      <Admin />
-                    </AdminRoute>
-                  }
-                />
-              </Routes>
+                  <Route
+                    path="/admin"
+                    element={
+                      <AdminRoute>
+                        <PageTransition><Admin /></PageTransition>
+                      </AdminRoute>
+                    }
+                  />
+                </Routes>
+              </AnimatePresence>
             </Suspense>
-          </main>
+          </div>
           <Footer />
           <Toaster position="top-right" />
         </OrdersProvider>

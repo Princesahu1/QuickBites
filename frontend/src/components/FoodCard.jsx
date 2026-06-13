@@ -35,82 +35,85 @@ export default function FoodCard({ food }) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.97 }}
-      className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden border border-gray-100 dark:border-gray-700"
+      whileHover={{ y: -8 }}
+      className="bg-white dark:bg-dark-card rounded-[2rem] shadow-sm hover:shadow-2xl hover:shadow-coral-500/10 transition-all duration-300 overflow-hidden border border-gray-100 dark:border-dark-border group flex flex-col h-full"
     >
-      <img
-        src={imageSource}
-        onError={(e) => {
-          e.currentTarget.src = fallbackSrc;
-        }}
-        loading="lazy"
-        alt={food.name}
-        className="h-44 w-full object-cover rounded-t-2xl bg-gray-100 dark:bg-gray-800"
-      />
+      <div className="relative overflow-hidden aspect-[4/3]">
+        <img
+          src={imageSource}
+          onError={(e) => {
+            e.currentTarget.src = fallbackSrc;
+          }}
+          loading="lazy"
+          alt={food.name}
+          className="w-full h-full object-cover bg-gray-50 dark:bg-gray-800 transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        
+        {food.isVeg !== undefined && (
+          <div className="absolute top-4 right-4 glass px-3 py-1.5 rounded-xl shadow-sm backdrop-blur-md flex items-center gap-1.5">
+            <span className={`w-2 h-2 rounded-full ${food.isVeg ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]" : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]"}`}></span>
+            <span className={`text-xs font-bold tracking-wider uppercase ${food.isVeg ? "text-green-700 dark:text-green-300" : "text-red-700 dark:text-red-300"}`}>
+              {food.isVeg ? "Veg" : "Non-Veg"}
+            </span>
+          </div>
+        )}
+      </div>
 
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100 flex-1">
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h3 className="font-display font-bold text-xl text-gray-900 dark:text-white leading-tight line-clamp-1 group-hover:text-coral-500 transition-colors">
             {food.name}
           </h3>
-          {food.isVeg !== undefined && (
-            <span
-              className={`ml-2 text-xs px-2 py-1 rounded ${
-                food.isVeg
-                  ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
-                  : "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
-              }`}
-            >
-              {food.isVeg ? "🟢 Veg" : "🔴 Non-Veg"}
-            </span>
-          )}
+          <p className="text-coral-500 font-extrabold text-xl shrink-0">₹{food.price}</p>
         </div>
 
-        <p className="text-gray-500 dark:text-gray-400 text-sm">
+        <p className="text-coral-400 dark:text-coral-500 text-xs font-bold uppercase tracking-wider mb-3">
           {food.category}
         </p>
 
         {food.description && (
-          <p className="text-gray-600 dark:text-gray-400 text-xs mt-1 line-clamp-2">
+          <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-2 mb-4 leading-relaxed mix-blend-normal">
             {food.description}
           </p>
         )}
-
-        <div className="flex items-center justify-between mt-3">
-          <p className="text-red-600 font-semibold text-lg">₹{food.price}</p>
-          {food.preparationTime && (
-            <span className="text-xs text-gray-500 dark:text-gray-400">
-              ⏱️ {food.preparationTime} min
-            </span>
-          )}
-        </div>
-
-        {food.rating > 0 && (
-          <div className="flex items-center gap-1 mt-2">
-            <span className="text-yellow-500">⭐</span>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {food.rating.toFixed(1)}
-            </span>
-            {food.reviewCount > 0 && (
-              <span className="text-xs text-gray-500 dark:text-gray-500">
-                ({food.reviewCount})
-              </span>
+        
+        <div className="mt-auto pt-4 border-t border-gray-100 dark:border-dark-border flex items-center justify-between">
+          <div className="flex flex-col gap-1">
+            {food.rating > 0 && (
+              <div className="flex items-center gap-1.5">
+                <span className="text-yellow-400 text-sm">★</span>
+                <span className="text-sm font-bold text-gray-900 dark:text-white">
+                  {food.rating.toFixed(1)}
+                </span>
+                {food.reviewCount > 0 && (
+                  <span className="text-xs text-gray-400 font-medium">
+                    ({food.reviewCount})
+                  </span>
+                )}
+              </div>
+            )}
+            
+            {food.preparationTime && (
+              <div className="flex items-center gap-1.5 text-xs font-medium text-gray-400">
+                <span className="text-gray-300 dark:text-gray-600">⏱</span>
+                {food.preparationTime} mins
+              </div>
             )}
           </div>
-        )}
 
-        <button
-          onClick={handleAdd}
-          disabled={food.isAvailable === false}
-          className={`mt-3 w-full py-2 rounded-xl font-medium transition ${
-            food.isAvailable === false
-              ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-red-500 to-orange-400 text-white hover:from-red-600 hover:to-orange-500"
-          }`}
-        >
-          {food.isAvailable === false ? "Not Available" : "Add to Cart"}
-        </button>
+          <button
+            onClick={handleAdd}
+            disabled={food.isAvailable === false}
+            className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm active:scale-95 ${
+              food.isAvailable === false
+                ? "bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed"
+                : "bg-coral-50 dark:bg-coral-900/20 text-coral-600 dark:text-coral-400 hover:bg-coral-500 hover:text-white dark:hover:bg-coral-500 hover:shadow-coral-500/30"
+            }`}
+          >
+            {food.isAvailable === false ? "Out" : "Add +"}
+          </button>
+        </div>
       </div>
     </motion.div>
   );

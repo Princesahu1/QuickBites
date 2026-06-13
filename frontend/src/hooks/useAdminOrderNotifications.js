@@ -3,7 +3,6 @@ import { toast } from "react-hot-toast";
 import { API_BASE_URL } from "../config/api";
 
 const POLL_INTERVAL_MS = 30_000; // 30 seconds
-const STORAGE_KEY = "qb_admin_last_order_count";
 
 /**
  * Polls GET /api/admin/orders every 30s when the user is an admin.

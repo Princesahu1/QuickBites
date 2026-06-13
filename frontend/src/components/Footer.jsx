@@ -20,18 +20,18 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-12 pb-6">
+    <footer className="bg-white dark:bg-dark-bg border-t border-gray-100 dark:border-dark-border pt-16 pb-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="text-3xl font-extrabold text-red-600 mb-4 inline-block">
-              🍔 QuickBite
+            <Link to="/" className="text-3xl font-extrabold text-coral-500 mb-6 inline-block tracking-tight">
+              QB.
             </Link>
-            <p className="text-gray-400 mb-4 max-w-md">
-              Your favorite canteen food ordering platform. Order online and pick up fresh, hot meals without the wait!
+            <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md leading-relaxed text-sm">
+              Your favorite canteen food ordering platform. Order online and pick up fresh, hot meals without the wait! Elevating campus dining to a premium experience.
             </p>
             
             {/* Social Links */}
@@ -40,48 +40,48 @@ export default function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-red-600 transition"
+                className="bg-gray-50 dark:bg-dark-card p-2.5 rounded-xl border border-gray-200 dark:border-dark-border text-gray-500 dark:text-gray-400 hover:text-coral-500 hover:border-coral-200 hover:bg-coral-50 dark:hover:text-coral-400 transition-all shadow-sm"
                 aria-label="Facebook"
               >
-                <Facebook size={20} />
+                <Facebook size={18} />
               </a>
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-red-600 transition"
+                className="bg-gray-50 dark:bg-dark-card p-2.5 rounded-xl border border-gray-200 dark:border-dark-border text-gray-500 dark:text-gray-400 hover:text-coral-500 hover:border-coral-200 hover:bg-coral-50 dark:hover:text-coral-400 transition-all shadow-sm"
                 aria-label="Twitter"
               >
-                <Twitter size={20} />
+                <Twitter size={18} />
               </a>
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-red-600 transition"
+                className="bg-gray-50 dark:bg-dark-card p-2.5 rounded-xl border border-gray-200 dark:border-dark-border text-gray-500 dark:text-gray-400 hover:text-coral-500 hover:border-coral-200 hover:bg-coral-50 dark:hover:text-coral-400 transition-all shadow-sm"
                 aria-label="Instagram"
               >
-                <Instagram size={20} />
+                <Instagram size={18} />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold text-lg mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="text-gray-900 dark:text-white font-bold text-sm uppercase tracking-wider mb-6">Explore</h3>
+            <ul className="space-y-3 font-medium text-sm">
               <li>
-                <Link to="/" className="hover:text-red-500 transition">
+                <Link to="/" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 dark:hover:text-coral-400 transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/menu" className="hover:text-red-500 transition">
-                  Menu
+                <Link to="/menu" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 dark:hover:text-coral-400 transition-colors">
+                  Our Menu
                 </Link>
               </li>
               <li>
-                <Link to="/checkout" className="hover:text-red-500 transition">
+                <Link to="/checkout" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 dark:hover:text-coral-400 transition-colors">
                   Checkout
                 </Link>
               </li>
@@ -89,14 +89,14 @@ export default function Footer() {
                 <a
                   href="/#about"
                   onClick={scrollToAbout}
-                  className="hover:text-red-500 transition cursor-pointer"
+                  className="text-gray-500 dark:text-gray-400 hover:text-coral-500 dark:hover:text-coral-400 transition-colors cursor-pointer"
                 >
                   About Us
                 </a>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-red-500 transition">
-                  Contact Us
+                <Link to="/contact" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 dark:hover:text-coral-400 transition-colors">
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -104,25 +104,25 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-white font-semibold text-lg mb-4">Contact Us</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2">
-                <MapPin size={18} className="mt-1 flex-shrink-0 text-red-500" />
-                <span className="text-sm">
+            <h3 className="text-gray-900 dark:text-white font-bold text-sm uppercase tracking-wider mb-6">Contact</h3>
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <MapPin size={18} className="mt-0.5 flex-shrink-0 text-coral-500" />
+                <span className="text-gray-500 dark:text-gray-400 leading-relaxed">
                   College Canteen,<br />
                   Campus Building,<br />
                   Your City, 123456
                 </span>
               </li>
-              <li className="flex items-center gap-2">
-                <Phone size={18} className="flex-shrink-0 text-red-500" />
-                <a href="tel:+911234567890" className="hover:text-red-500 transition text-sm">
+              <li className="flex items-center gap-3">
+                <Phone size={18} className="flex-shrink-0 text-coral-500" />
+                <a href="tel:+911234567890" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 font-medium transition-colors">
                   +91 12345 67890
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Mail size={18} className="flex-shrink-0 text-red-500" />
-                <Link to="/contact" className="hover:text-red-500 transition text-sm">
+              <li className="flex items-center gap-3">
+                <Mail size={18} className="flex-shrink-0 text-coral-500" />
+                <Link to="/contact" className="text-gray-500 dark:text-gray-400 hover:text-coral-500 font-medium transition-colors">
                   support@quickbite.com
                 </Link>
               </li>
@@ -131,31 +131,26 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-800 pt-6">
+        <div className="border-t border-gray-100 dark:border-dark-border pt-8">
           
           {/* Bottom Section */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-sm text-center md:text-left">
+            <p className="text-gray-400 dark:text-gray-500 text-xs font-medium text-center md:text-left">
               © {currentYear} QuickBite. All rights reserved.
             </p>
             
-            <div className="flex gap-6 text-sm">
-              <Link to="/privacy" className="hover:text-red-500 transition">
+            <div className="flex gap-6 text-xs font-semibold">
+              <Link to="/privacy" className="text-gray-400 dark:text-gray-500 hover:text-coral-500 transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="hover:text-red-500 transition">
+              <Link to="/terms" className="text-gray-400 dark:text-gray-500 hover:text-coral-500 transition-colors">
                 Terms of Service
               </Link>
-              <Link to="/refund" className="hover:text-red-500 transition">
-                Refund Policy
+              <Link to="/refund" className="text-gray-400 dark:text-gray-500 hover:text-coral-500 transition-colors">
+                Refunds
               </Link>
             </div>
           </div>
-
-          {/* Made with Love */}
-          <p className="text-center text-gray-600 text-sm mt-4">
-            Made with ❤️ for hungry students
-          </p>
         </div>
       </div>
     </footer>

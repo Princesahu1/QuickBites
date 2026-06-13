@@ -147,7 +147,7 @@ export default function AuthProvider({ children }) {
       requestPasswordReset: () => Promise.resolve(),
       resetPassword: () => Promise.resolve(),
     }),
-    [user, loading]
+    [user, loading, isAuthenticated]
   );
 
   if (loading) {

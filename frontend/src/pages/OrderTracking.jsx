@@ -13,8 +13,6 @@ const STATUS_STEPS = [
   { key: "completed", label: "Completed",       icon: "🏁", color: "gray"   },
 ];
 
-const STATUS_CANCELLED = { key: "cancelled", label: "Cancelled", icon: "❌", color: "red" };
-
 const STATUS_BADGE = {
   pending:   "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
   confirmed: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300",
@@ -68,7 +66,6 @@ function StatusTimeline({ status }) {
       {STATUS_STEPS.map((step, idx) => {
         const done    = idx < currentIdx;
         const active  = idx === currentIdx;
-        const future  = idx > currentIdx;
         return (
           <React.Fragment key={step.key}>
             <div className="flex flex-col items-center min-w-[72px]">
@@ -153,68 +150,72 @@ function OrderCard({ order }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+    <div className="glass-card shadow-sm overflow-hidden p-0 border border-white/50 dark:border-dark-border mb-4 transition-all hover:shadow-md hover:border-coral-200 dark:hover:border-coral-900/50">
       {/* Header */}
-      <div className="px-6 py-4 flex flex-wrap items-start justify-between gap-3 border-b border-gray-100 dark:border-gray-700">
+      <div className="px-6 py-5 flex flex-wrap items-start justify-between gap-3 border-b border-gray-100 dark:border-dark-border bg-white/30 dark:bg-black/10">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold text-gray-900 dark:text-white text-sm">
+            <span className="font-extrabold font-display text-gray-900 dark:text-white text-lg tracking-tight">
               #{order.orderNumber || order.id?.slice(-8).toUpperCase()}
             </span>
-            <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${STATUS_BADGE[order.status] || STATUS_BADGE.pending}`}>
-              {order.status?.charAt(0).toUpperCase() + order.status?.slice(1) || "Pending"}
+            <span className={`text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full font-bold shadow-sm ${STATUS_BADGE[order.status] || STATUS_BADGE.pending}`}>
+              {order.status || "PENDING"}
             </span>
           </div>
-          <p className="text-xs text-gray-400 mt-1">{fmtDate(order.createdAt)}</p>
+          <p className="text-xs text-gray-500 font-medium mt-1 uppercase tracking-wider">{fmtDate(order.createdAt)}</p>
         </div>
         <div className="text-right">
-          <p className="font-bold text-gray-900 dark:text-white">{fmtCurrency(order.finalAmount || order.totalAmount)}</p>
-          <p className="text-xs text-gray-400">{order.paymentMethod || "Cash"} • {order.paymentStatus || "pending"}</p>
+          <p className="font-extrabold font-display text-xl text-coral-500 dark:text-coral-400">{fmtCurrency(order.finalAmount || order.totalAmount)}</p>
+          <p className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mt-0.5">{order.paymentMethod || "Cash"} • <span className={order.paymentStatus === 'paid' ? 'text-green-500' : 'text-amber-500'}>{order.paymentStatus || "pending"}</span></p>
         </div>
       </div>
 
       {/* Timeline */}
-      <div className="px-6 py-4">
+      <div className="px-6 py-5 bg-white/20 dark:bg-black/5">
         <StatusTimeline status={order.status} />
         {/* Live countdown for takeaway orders */}
         <CountdownBadge pickupTime={order.pickupTime} status={order.status} />
       </div>
 
       {/* Toggle items */}
-      <div className="px-6 pb-4">
+      <div className="px-6 pb-5 pt-2">
         <button
           onClick={() => setExpanded((e) => !e)}
-          className="text-sm text-red-500 hover:text-red-600 font-medium transition"
+          className="text-xs uppercase tracking-widest font-bold text-coral-500 hover:text-coral-600 dark:hover:text-coral-400 transition-colors flex items-center gap-1.5"
         >
-          {expanded ? "▲ Hide items" : `▼ Show ${order.items?.length || 0} item(s)`}
+          {expanded ? (
+            <><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M14.77 12.79a.75.75 0 01-1.06-.02L10 8.832 6.29 12.77a.75.75 0 11-1.08-1.04l4.25-4.5a.75.75 0 011.08 0l4.25 4.5a.75.75 0 01-.02 1.06z" clipRule="evenodd" /></svg> Hide Items</>
+          ) : (
+            <><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg> Show {order.items?.length || 0} Item(s)</>
+          )}
         </button>
 
         {expanded && (
-          <div className="mt-3 space-y-2">
+          <div className="mt-4 space-y-3 animate-fade-in">
             {(order.items || []).map((item, i) => (
-              <div key={i} className="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-700 last:border-0">
+              <div key={i} className="flex justify-between items-center py-2.5 border-b border-gray-100 dark:border-dark-border last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                  <p className="text-sm font-bold text-gray-800 dark:text-gray-200">
                     {item.menuItem?.name || item.name || `Item ${i + 1}`}
                   </p>
-                  <p className="text-xs text-gray-400">Qty: {item.quantity || item.qty || 1}</p>
+                  <p className="text-xs font-semibold text-gray-400 mt-0.5 uppercase tracking-wider">Qty: {item.quantity || item.qty || 1}</p>
                 </div>
-                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <p className="text-sm font-extrabold text-gray-700 dark:text-gray-300">
                   {fmtCurrency((item.price || 0) * (item.quantity || item.qty || 1))}
                 </p>
               </div>
             ))}
 
             {/* Totals */}
-            <div className="pt-2 space-y-1 text-sm">
+            <div className="pt-3 space-y-2 mt-2">
               {order.discount > 0 && (
-                <div className="flex justify-between text-green-600">
+                <div className="flex justify-between text-green-600 text-sm font-bold">
                   <span>Discount</span><span>- {fmtCurrency(order.discount)}</span>
                 </div>
               )}
-              <div className="flex justify-between font-bold text-gray-900 dark:text-white pt-1 border-t border-gray-100 dark:border-gray-700">
+              <div className="flex justify-between font-extrabold text-gray-900 dark:text-white pt-3 border-t border-gray-100 dark:border-dark-border text-lg tracking-tight">
                 <span>Total</span>
-                <span>{fmtCurrency(order.finalAmount || order.totalAmount)}</span>
+                <span className="text-coral-500">{fmtCurrency(order.finalAmount || order.totalAmount)}</span>
               </div>
             </div>
           </div>
@@ -222,14 +223,24 @@ function OrderCard({ order }) {
 
         {/* Notes */}
         {order.notes && (
-          <p className="mt-3 text-xs text-gray-500 italic bg-gray-50 dark:bg-gray-700/40 px-3 py-2 rounded-lg">
-            📝 {order.notes}
+          <p className="mt-4 text-xs font-medium text-gray-600 dark:text-gray-400 italic bg-amber-50/50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/30 px-4 py-3 rounded-xl flex gap-2 items-start shadow-inner">
+            <span className="text-lg leading-none">📝</span>
+            <span className="pt-0.5">{order.notes}</span>
           </p>
         )}
       </div>
     </div>
   );
 }
+
+const STATUS_LABELS = {
+  pending:   "Order Placed",
+  confirmed: "Confirmed ✅",
+  preparing: "Being Prepared 👨‍🍳",
+  ready:     "Ready for Pickup 🎉",
+  completed: "Completed 🏁",
+  cancelled: "Cancelled ❌",
+};
 
 // ── Main Page ──────────────────────────────────────────────────
 export default function OrderTracking() {
@@ -243,15 +254,6 @@ export default function OrderTracking() {
 
   // Track previous statuses to detect changes
   const prevStatusesRef = useRef({});  // { orderId: status }
-
-  const STATUS_LABELS = {
-    pending:   "Order Placed",
-    confirmed: "Confirmed ✅",
-    preparing: "Being Prepared 👨‍🍳",
-    ready:     "Ready for Pickup 🎉",
-    completed: "Completed 🏁",
-    cancelled: "Cancelled ❌",
-  };
 
   const fetchOrders = useCallback(async (isBackground = false) => {
     if (!isBackground) setLoading(true);
@@ -319,12 +321,18 @@ export default function OrderTracking() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-20 px-4">
-        <div className="text-center bg-white dark:bg-gray-800 rounded-2xl p-10 shadow border border-gray-200 dark:border-gray-700 max-w-sm">
-          <div className="text-5xl mb-4">🔒</div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Login Required</h2>
-          <p className="text-gray-500 mb-6">Please login to see your orders.</p>
-          <Link to="/login" className="bg-red-500 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-red-600 transition">
+      <div className="min-h-screen pt-28 pb-20 px-4 relative flex items-center justify-center overflow-hidden bg-gray-50 dark:bg-dark-bg">
+        {/* Background Orbs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-coral-400/10 dark:bg-coral-900/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen -z-10" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-400/10 dark:bg-amber-900/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen -z-10" />
+
+        <div className="text-center glass-card p-10 max-w-sm relative z-10 border border-white/50 dark:border-dark-border">
+          <div className="w-20 h-20 bg-coral-50 dark:bg-coral-900/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner ring-4 ring-white dark:ring-[#18181A]">
+            <span className="text-4xl">🔒</span>
+          </div>
+          <h2 className="text-2xl font-extrabold font-display text-gray-900 dark:text-white mb-2 tracking-tight">Login Required</h2>
+          <p className="text-gray-500 dark:text-gray-400 font-medium mb-8">Please login to see your orders.</p>
+          <Link to="/login" className="btn-primary w-full inline-flex justify-center shadow-coral-500/30 py-3.5">
             Go to Login
           </Link>
         </div>
@@ -337,78 +345,86 @@ export default function OrderTracking() {
   const activeCount = orders.filter((o) => !["completed", "cancelled"].includes(o.status)).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24 pb-16 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen pt-28 pb-20 px-4 relative overflow-hidden bg-gray-50 dark:bg-dark-bg">
+      {/* Background Orbs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-coral-400/10 dark:bg-coral-900/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen -z-10" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-400/10 dark:bg-amber-900/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen -z-10" />
+
+      <div className="max-w-3xl mx-auto relative z-10">
 
         {/* Header */}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">📦 My Orders</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">
+            <h1 className="text-4xl font-extrabold font-display text-gray-900 dark:text-white tracking-tight mb-2">📦 My Orders</h1>
+            <p className="text-gray-500 dark:text-gray-400 font-medium">
               {activeCount > 0
-                ? `${activeCount} active order${activeCount > 1 ? "s" : ""} in progress`
+                ? <><strong className="text-coral-500">{activeCount} active order{activeCount > 1 ? "s" : ""}</strong> in progress</>
                 : "Track all your past and current orders"}
             </p>
             {lastUpdated && (
-              <p className="text-xs text-gray-400 mt-1">
-                🔄 Auto-refreshing in <span className="font-mono font-bold text-red-500">{countdown}s</span>
-                {" · "}
-                Last updated {lastUpdated.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              <p className="text-[10px] font-bold tracking-widest uppercase text-gray-400 dark:text-gray-500 mt-2">
+                <span className="inline-flex items-center justify-center w-2 h-2 rounded-full bg-coral-500 animate-pulse mr-1"></span>
+                Auto-refreshing in <span className="font-mono text-coral-500 ml-0.5">{countdown}S</span>
+                <span className="opacity-50 mx-2">|</span>
+                Updated {lastUpdated.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
               </p>
             )}
           </div>
           <button
             onClick={() => { fetchOrders(false); }}
-            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:border-red-400 transition"
+            className="flex items-center gap-2 px-5 py-2.5 glass-card border border-white/50 dark:border-dark-border rounded-xl text-xs font-bold tracking-widest uppercase text-gray-600 dark:text-gray-300 hover:text-coral-600 transition-colors shadow-sm"
           >
-            ↻ Refresh now
+            ↻ Refresh
           </button>
         </div>
 
         {/* Filter tabs */}
-        <div className="flex gap-2 flex-wrap mb-6">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition ${
-                filter === f
-                  ? "bg-red-500 text-white shadow"
-                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-red-300"
-              }`}
-            >
-              {f === "all" ? `All (${orders.length})` : f}
-            </button>
-          ))}
+        <div className="flex gap-2 flex-wrap mb-8">
+          {FILTERS.map((f) => {
+            const isActive = filter === f;
+            return (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all border ${
+                  isActive
+                    ? "bg-coral-500 border-coral-500 text-white shadow-md shadow-coral-500/20"
+                    : "bg-white/50 dark:bg-[#18181A]/50 border-gray-200 dark:border-dark-border text-gray-600 dark:text-gray-400 hover:border-coral-300 dark:hover:border-coral-900"
+                }`}
+              >
+                {f === "all" ? `All (${orders.length})` : f}
+              </button>
+            )
+          })}
         </div>
 
         {/* Content */}
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="animate-spin h-12 w-12 rounded-full border-4 border-red-500 border-t-transparent" />
+            <div className="animate-spin h-12 w-12 rounded-full border-4 border-coral-500 border-t-transparent shadow-lg shadow-coral-500/20" />
           </div>
         ) : error ? (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
+          <div className="glass-card border border-red-200 dark:border-red-900/50 rounded-2xl p-8 text-center bg-red-50/50 dark:bg-red-900/10">
             <div className="text-4xl mb-3">⚠️</div>
-            <p className="text-red-700 dark:text-red-400 font-medium">{error}</p>
-            <button onClick={fetchOrders} className="mt-4 text-sm text-red-500 hover:underline">Try again</button>
+            <p className="text-red-700 dark:text-red-400 font-bold">{error}</p>
+            <button onClick={fetchOrders} className="mt-4 text-xs font-bold tracking-widest uppercase text-red-500 hover:text-red-600 border border-red-200 px-4 py-2 rounded-lg bg-white/50">Try again</button>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-12 text-center">
-            <div className="text-5xl mb-4">🛍️</div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">No orders found</h3>
-            <p className="text-gray-500 mb-6">
-              {filter === "all" ? "You haven't placed any orders yet." : `No ${filter} orders.`}
+          <div className="glass-card rounded-3xl border border-white/50 dark:border-dark-border p-12 text-center shadow-lg">
+            <div className="text-6xl mb-6">🛍️</div>
+            <h3 className="text-2xl font-extrabold font-display text-gray-900 dark:text-white mb-2 tracking-tight">No orders found</h3>
+            <p className="text-gray-500 font-medium mb-8">
+              {filter === "all" ? "You haven't placed any orders yet." : `You have no ${filter} orders.`}
             </p>
             <Link
               to="/menu"
-              className="bg-gradient-to-r from-red-500 to-orange-400 text-white px-6 py-2.5 rounded-xl font-semibold hover:from-red-600 hover:to-orange-500 transition"
+              className="btn-primary inline-flex shadow-coral-500/30 px-6 py-3"
             >
-              Browse Menu
+              Start Ordering
             </Link>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {filtered.map((order) => (
               <OrderCard key={order.id} order={order} />
             ))}

@@ -97,22 +97,28 @@ export default function VerifyEmail() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 px-4 pt-20">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
-        <div className="text-center mb-8">
-          <div className="text-6xl mb-4">📧</div>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Verify Your Email
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg px-4 py-20 relative overflow-hidden">
+      {/* Background Orbs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-coral-400/10 dark:bg-coral-900/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen -z-10" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-400/10 dark:bg-amber-900/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen -z-10" />
+
+      <div className="max-w-md w-full glass-card p-8 md:p-10 relative z-10 animate-fade-in">
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 bg-coral-50 dark:bg-coral-900/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner ring-4 ring-white dark:ring-[#18181A]">
+            <span className="text-4xl">📧</span>
+          </div>
+          <h2 className="text-3xl font-extrabold font-display text-gray-900 dark:text-white tracking-tight mb-2">
+            Verify Email
           </h2>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-gray-500 dark:text-gray-400 font-medium">
             We've sent a 6-digit OTP to<br />
-            <strong>{email || 'your email'}</strong>
+            <strong className="text-coral-500 mt-1 inline-block">{email || 'your email'}</strong>
           </p>
         </div>
         
         {!email && (
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
+            <label className="block text-xs font-bold tracking-widest text-gray-400 uppercase mb-2">
               Enter your email address
             </label>
             <input
@@ -120,7 +126,7 @@ export default function VerifyEmail() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+              className="input-field"
               placeholder="your@email.com"
             />
           </div>
@@ -128,8 +134,8 @@ export default function VerifyEmail() {
         
         <form onSubmit={handleVerifyOTP} className="space-y-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-              Enter OTP
+            <label className="block text-xs font-bold tracking-widest text-gray-400 uppercase mb-3 text-center">
+              Enter Security Code
             </label>
             <input
               type="text"
@@ -137,10 +143,11 @@ export default function VerifyEmail() {
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
               required
               maxLength={6}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 transition text-center text-2xl tracking-widest font-bold"
+              className="w-full px-4 py-4 rounded-2xl border-2 border-gray-200 dark:border-dark-border bg-white/50 dark:bg-black/20 text-gray-900 dark:text-white text-center text-4xl font-extrabold tracking-[0.5em] focus:outline-none focus:border-coral-500 transition-colors shadow-inner"
               placeholder="000000"
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+            <p className="text-xs font-bold tracking-widest text-gray-400 uppercase mt-4 text-center flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-coral-500 animate-pulse"></span>
               Valid for 10 minutes
             </p>
           </div>
@@ -148,27 +155,28 @@ export default function VerifyEmail() {
           <button
             type="submit"
             disabled={loading || otp.length !== 6 || !email}
-            className="w-full bg-gradient-to-r from-red-500 to-orange-400 text-white py-3 rounded-xl font-semibold hover:from-red-600 hover:to-orange-500 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            className={`w-full py-3.5 text-lg justify-center font-bold rounded-xl transition-all shadow-lg flex items-center gap-2 mt-4 ${loading || otp.length !== 6 || !email ? 'bg-gray-400 shadow-none cursor-not-allowed text-white/80' : 'btn-primary shadow-coral-500/30 hover:shadow-coral-500/50'}`}
           >
             {loading ? 'Verifying...' : 'Verify OTP'}
           </button>
 
-          <div className="text-center space-y-3">
+          <div className="pt-6 mt-6 border-t border-gray-100 dark:border-dark-border text-center space-y-4">
             <button
               type="button"
               onClick={handleResendOTP}
               disabled={loading || !email}
-              className="text-sm text-red-600 dark:text-red-400 hover:underline disabled:opacity-50"
+              className="text-sm font-bold text-coral-500 hover:text-coral-600 transition-colors disabled:opacity-50"
             >
-              Didn't receive OTP? Resend
+              Didn't receive code? Resend
             </button>
 
             <div>
               <Link
                 to="/login"
-                className="text-sm text-gray-600 dark:text-gray-400 hover:underline"
+                className="text-sm font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors inline-flex items-center gap-1.5"
               >
-                ← Back to login
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" /></svg>
+                Back to login
               </Link>
             </div>
           </div>

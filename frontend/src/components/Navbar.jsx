@@ -62,10 +62,10 @@ export default function Navbar() {
   };
 
   const linkClass = ({ isActive }) =>
-    `hover:text-red-600 transition ${
+    `px-3 py-2 rounded-xl transition-all duration-300 ${
       isActive
-        ? "text-red-600 font-semibold"
-        : "text-gray-700 dark:text-gray-200"
+        ? "bg-coral-50 dark:bg-dark-border text-coral-600 dark:text-coral-400 font-semibold"
+        : "text-gray-600 dark:text-gray-300 hover:text-coral-500 dark:hover:text-coral-400 hover:bg-gray-50 dark:hover:bg-gray-800"
     }`;
 
   return (
@@ -74,38 +74,19 @@ export default function Navbar() {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed top-0 left-0 w-full bg-white/80 dark:bg-gray-900/70 backdrop-blur-lg shadow-sm z-50"
+        className="fixed top-0 left-0 w-full glass z-50 transition-all duration-300"
       >
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
-            className="hover:scale-105 transition flex items-center gap-2"
+            className="hover:scale-105 transition-transform flex items-center gap-2 group"
           >
-            {/* Inline SVG logo — no external file needed */}
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#ef4444"/>
-                  <stop offset="100%" stopColor="#f97316"/>
-                </linearGradient>
-              </defs>
-              {/* Circle background */}
-              <circle cx="18" cy="18" r="18" fill="url(#bgGrad)"/>
-              {/* Burger bun top */}
-              <path d="M9 13C9 11.3 13 10 18 10C23 10 27 11.3 27 13H9Z" fill="white" opacity="0.95"/>
-              {/* Burger layers */}
-              <rect x="9" y="14" width="18" height="3" rx="1" fill="#fbbf24"/>
-              <rect x="9" y="18" width="18" height="2.5" rx="1" fill="#84cc16"/>
-              <rect x="9" y="21" width="18" height="2.5" rx="1" fill="#ef4444"/>
-              {/* Burger bun bottom */}
-              <path d="M9 24H27C27 25.7 23 27 18 27C13 27 9 25.7 9 24Z" fill="white" opacity="0.95"/>
-              {/* Lightning bolt overlay */}
-              <path d="M20 10L15 19H19L17 27L23 17H19L20 10Z" fill="white" opacity="0.3"/>
-            </svg>
-            <span className="text-xl font-extrabold bg-gradient-to-r from-red-500 to-orange-400 bg-clip-text text-transparent tracking-tight">
-              QuickBite
-            </span>
+            <div className="bg-coral-50 dark:bg-dark-card p-1.5 rounded-xl border border-coral-200 dark:border-dark-border group-hover:shadow-lg transition-shadow">
+              <span className="text-2xl font-extrabold bg-gradient-to-r from-coral-400 to-coral-600 bg-clip-text text-transparent tracking-tight">
+                QB.
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -118,48 +99,48 @@ export default function Navbar() {
             <a
               href="/#about"
               onClick={scrollToAbout}
-              className="hover:text-red-600 transition text-gray-700 dark:text-gray-200 font-medium cursor-pointer"
+              className="text-gray-600 dark:text-gray-300 hover:text-coral-500 dark:hover:text-coral-400 transition-colors font-medium cursor-pointer"
             >
               About
             </a>
 
             {isAuthenticated ? (
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-700 dark:text-gray-200">
+              <div className="flex items-center gap-4 border-l border-gray-200 dark:border-gray-700 pl-4 ml-2">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
                   Hi, {user?.name || "User"}
                 </span>
                 {user?.role === "admin" && (
                   <NavLink
                     to="/admin"
                     className={({ isActive }) =>
-                      `px-3 py-1.5 rounded-lg text-sm font-semibold transition ${
+                      `px-3 py-1.5 rounded-lg text-sm font-bold transition-all shadow-sm ${
                         isActive
-                          ? "bg-purple-600 text-white"
-                          : "bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white dark:bg-purple-900/40 dark:text-purple-300"
+                          ? "bg-purple-600 text-white shadow-purple-500/30"
+                          : "bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white dark:bg-purple-900/30 dark:text-purple-400"
                       }`
                     }
                   >
-                    🛠️ Admin
+                    Admin
                   </NavLink>
                 )}
                 <button
                   onClick={handleLogout}
-                  className="text-red-600 hover:text-red-700 transition font-medium"
+                  className="text-gray-500 hover:text-red-500 transition-colors font-medium text-sm"
                 >
                   Logout
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 border-l border-gray-200 dark:border-gray-700 pl-4 ml-2">
                 <Link 
                   to="/login" 
-                  className="text-gray-700 dark:text-gray-200 hover:text-red-600 transition font-medium"
+                  className="text-gray-600 dark:text-gray-300 hover:text-coral-500 transition-colors font-medium"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition font-medium"
+                  className="btn-primary text-sm py-1.5 px-4"
                 >
                   Register
                 </Link>
@@ -173,18 +154,18 @@ export default function Navbar() {
 
             <button
               onClick={() => setOpen(true)}
-              className="relative bg-gradient-to-r from-red-500 to-orange-400 text-white px-3 py-2 rounded-xl shadow hover:from-red-600 hover:to-orange-500"
+              className="relative p-2 text-gray-700 dark:text-gray-200 hover:bg-coral-50 dark:hover:bg-gray-800 rounded-full transition-colors group"
             >
-              <ShoppingCart size={20} />
+              <ShoppingCart size={22} className="group-hover:text-coral-500 transition-colors" />
               {count > 0 && (
-                <span className="absolute -top-2 -right-2 bg-black text-white text-xs px-1.5 py-0.5 rounded-full">
+                <span className="absolute 0 right-0 top-0 bg-coral-500 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full shadow-md animate-bounce">
                   {count}
                 </span>
               )}
             </button>
 
             <button
-              className="md:hidden text-gray-700 dark:text-gray-200"
+              className="md:hidden p-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               onClick={() => setMobile((m) => !m)}
             >
               <Menu size={24} />
@@ -195,12 +176,12 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {mobile && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white dark:bg-gray-900 shadow-inner p-4 border-t dark:border-gray-800"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-white dark:bg-dark-card border-t border-gray-100 dark:border-dark-border"
           >
-            <div className="flex flex-col gap-3 font-medium">
+            <div className="flex flex-col gap-3 font-medium p-4">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.name}
@@ -214,56 +195,50 @@ export default function Navbar() {
               <a
                 href="/#about"
                 onClick={scrollToAbout}
-                className="hover:text-red-600 transition text-gray-700 dark:text-gray-200 font-medium cursor-pointer"
+                className="text-gray-600 dark:text-gray-300 hover:text-coral-500 transition-colors py-2"
               >
                 About
               </a>
 
-              <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-3">
+              <div className="pt-3 mt-2 border-t border-gray-100 dark:border-dark-border flex flex-col gap-3">
                 {isAuthenticated ? (
                   <>
-                    <span className="text-sm text-gray-700 dark:text-gray-200">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-xl text-center">
                       Hi, {user?.name || "User"}
                     </span>
                     {user?.role === "admin" && (
                       <NavLink
                         to="/admin"
                         onClick={() => setMobile(false)}
-                        className={({ isActive }) =>
-                          `px-4 py-2 rounded-xl text-sm font-semibold text-center transition ${
-                            isActive
-                              ? "bg-purple-600 text-white"
-                              : "bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white dark:bg-purple-900/40 dark:text-purple-300"
-                          }`
-                        }
+                        className="btn-secondary text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-900 border"
                       >
-                        🛠️ Admin Dashboard
+                        Admin Dashboard
                       </NavLink>
                     )}
                     <button
                       onClick={handleLogout}
-                      className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-xl hover:from-orange-600 hover:to-red-600 transition font-medium shadow text-center"
+                      className="btn-primary flex-1"
                     >
                       Logout
                     </button>
                   </>
                 ) : (
-                  <>
+                  <div className="grid grid-cols-2 gap-3">
                     <Link 
                       to="/login" 
                       onClick={() => setMobile(false)}
-                      className="text-gray-700 dark:text-gray-200 hover:text-red-600 transition"
+                      className="btn-secondary text-center"
                     >
                       Login
                     </Link>
                     <Link
                       to="/register"
                       onClick={() => setMobile(false)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-xl text-center hover:bg-red-600 transition font-medium"
+                      className="btn-primary text-center"
                     >
                       Register
                     </Link>
-                  </>
+                  </div>
                 )}
               </div>
             </div>

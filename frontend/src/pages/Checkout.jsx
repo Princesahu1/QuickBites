@@ -114,693 +114,269 @@ export default function Checkout() {
   };
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        * { box-sizing: border-box; }
+    <main className="min-h-screen bg-gray-50 dark:bg-dark-bg pt-28 pb-20 px-4 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute top-[0%] left-[-10%] w-[50%] h-[50%] bg-coral-400/5 dark:bg-coral-900/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen -z-10" />
 
-        /* ── Light mode defaults ── */
-        .qb-page {
-          --bg:       #f9fafb;
-          --surface:  #ffffff;
-          --surface2: #f3f4f6;
-          --border:   #e5e7eb;
-          --border2:  #f3f4f6;
-          --text:     #111827;
-          --muted:    #6b7280;
-          --subtle:   #9ca3af;
-          --accent:   #ff5c2b;
-          --accent-glow: rgba(255,92,43,.25);
-          --input-bg: #f3f4f6;
-          --chip-dine-bg: rgba(34,197,94,.08);
-          --chip-dine-border: rgba(34,197,94,.2);
-          --chip-dine-text: #16a34a;
-          --chip-take-bg: rgba(255,92,43,.08);
-          --chip-take-border: rgba(255,92,43,.2);
-          --chip-take-text: #e8420a;
-        }
-
-        /* ── Dark mode (follows site's html.dark or prefers-color-scheme) ── */
-        html.dark .qb-page,
-        .dark .qb-page,
-        [data-theme="dark"] .qb-page {
-          --bg:       #0f0f0f;
-          --surface:  #161616;
-          --surface2: #0f0f0f;
-          --border:   #232323;
-          --border2:  #1e1e1e;
-          --text:     #f0f0f0;
-          --muted:    #666666;
-          --subtle:   #3a3a3a;
-          --accent:   #ff5c2b;
-          --accent-glow: rgba(255,92,43,.3);
-          --input-bg: #111111;
-          --chip-dine-bg: rgba(34,197,94,.08);
-          --chip-dine-border: rgba(34,197,94,.18);
-          --chip-dine-text: #4ade80;
-          --chip-take-bg: rgba(255,92,43,.08);
-          --chip-take-border: rgba(255,92,43,.18);
-          --chip-take-text: #ff5c2b;
-        }
-
-
-
-
-        .qb-page {
-          min-height: 100vh;
-          background: var(--bg);
-          padding: 88px 20px 60px;
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          color: var(--text);
-          transition: background .3s, color .3s;
-        }
-
-        .qb-inner { max-width: 1080px; margin: 0 auto; }
-
-        /* Hero */
-        .qb-hero {
-          margin-bottom: 36px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 12px;
-        }
-
-        .qb-hero h1 {
-          font-size: clamp(2rem, 5vw, 3rem);
-          font-weight: 800;
-          color: var(--text);
-          margin: 0;
-          letter-spacing: -1.5px;
-          line-height: 1;
-        }
-
-        .qb-hero h1 span { color: var(--accent); }
-
-        .qb-live-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background: var(--surface);
-          border: 1px solid var(--border);
-          color: var(--muted);
-          font-size: 13px;
-          font-weight: 600;
-          padding: 8px 16px;
-          border-radius: 30px;
-        }
-
-        .qb-live-dot {
-          width: 7px; height: 7px;
-          border-radius: 50%;
-          background: var(--accent);
-          animation: blink 1.8s infinite;
-        }
-
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-
-        /* Layout */
-        .qb-layout {
-          display: grid;
-          grid-template-columns: 1fr 360px;
-          gap: 20px;
-          align-items: start;
-        }
-
-        @media(max-width:860px){ .qb-layout{ grid-template-columns:1fr; } }
-
-        /* Card */
-        .qb-card {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: 20px;
-          padding: 28px;
-          margin-bottom: 16px;
-        }
-
-        .qb-card-title {
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 1.5px;
-          text-transform: uppercase;
-          color: var(--muted);
-          margin: 0 0 22px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .qb-card-title::after {
-          content:''; flex:1; height:1px; background: var(--border);
-        }
-
-        /* Toggle */
-        .qb-toggle {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          background: var(--input-bg);
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          padding: 5px;
-          gap: 5px;
-        }
-
-        .qb-tab {
-          padding: 15px;
-          border: none;
-          border-radius: 10px;
-          background: transparent;
-          color: var(--muted);
-          font-family: inherit;
-          font-size: 15px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all .2s;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-        }
-
-        .qb-tab.on {
-          background: var(--accent);
-          color: #fff;
-          box-shadow: 0 4px 20px var(--accent-glow);
-        }
-
-        /* Tables */
-        .tbl-grid {
-          display: grid;
-          grid-template-columns: repeat(5,1fr);
-          gap: 8px;
-          margin-top: 20px;
-        }
-
-        @media(max-width:480px){ .tbl-grid{ grid-template-columns:repeat(4,1fr); } }
-
-        .tbl-btn {
-          aspect-ratio:1;
-          background: var(--input-bg);
-          border: 1px solid var(--border);
-          border-radius: 12px;
-          color: var(--muted);
-          font-family: inherit;
-          font-size: 15px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all .15s;
-          display:flex; align-items:center; justify-content:center;
-        }
-
-        .tbl-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-        .tbl-btn.on {
-          background: var(--accent);
-          border-color: var(--accent);
-          color: #fff;
-          box-shadow: 0 4px 16px var(--accent-glow);
-        }
-
-        .tbl-selected {
-          margin-top: 14px;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          background: rgba(255,92,43,.08);
-          border: 1px solid rgba(255,92,43,.2);
-          color: var(--accent);
-          font-size: 13px;
-          font-weight: 700;
-          padding: 8px 14px;
-          border-radius: 10px;
-        }
-
-        /* Inputs */
-        .qb-input {
-          width: 100%;
-          padding: 13px 16px;
-          background: var(--input-bg);
-          border: 1px solid var(--border);
-          border-radius: 12px;
-          color: var(--text);
-          font-family: inherit;
-          font-size: 15px;
-          outline: none;
-          transition: border-color .2s, box-shadow .2s;
-        }
-
-        .qb-input:focus {
-          border-color: var(--accent);
-          box-shadow: 0 0 0 3px rgba(255,92,43,.1);
-        }
-
-        .qb-input::placeholder { color: var(--subtle); }
-        .qb-input[readonly] { color: var(--subtle); cursor: not-allowed; }
-
-        /* datetime-local icon in dark mode */
-        .qb-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-          filter: var(--cal-icon-filter, none);
-          cursor: pointer;
-          opacity: .6;
-        }
-
-        html.dark .qb-input[type="datetime-local"]::-webkit-calendar-picker-indicator,
-        .dark .qb-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-          filter: invert(1);
-        }
-
-        .qb-lbl {
-          display: block;
-          font-size: 11px;
-          font-weight: 700;
-          color: var(--muted);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          margin-bottom: 8px;
-        }
-
-        .qb-field { margin-bottom: 16px; }
-        .qb-2col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-        @media(max-width:500px){ .qb-2col{ grid-template-columns:1fr; } }
-
-        /* Payment */
-        .pay-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-
-        .pay-opt {
-          padding: 16px 8px;
-          background: var(--input-bg);
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          text-align: center;
-          cursor: pointer;
-          font-family: inherit;
-          transition: all .18s;
-        }
-
-        .pay-opt:hover:not(.pay-off) { border-color: var(--accent); }
-        .pay-opt.pay-on { background: rgba(255,92,43,.08); border-color: var(--accent); }
-        .pay-opt.pay-off { opacity:.35; cursor:not-allowed; }
-
-        .pay-ico { font-size:26px; display:block; margin-bottom:6px; }
-        .pay-lbl { font-size:13px; font-weight:700; color: var(--muted); }
-        .pay-opt.pay-on .pay-lbl { color: var(--accent); }
-        .pay-sub { font-size:10px; color: var(--subtle); margin-top:3px; font-weight:500; }
-
-        textarea.qb-input { resize:vertical; min-height:88px; }
-
-        /* Summary */
-        .qb-summary {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: 20px;
-          padding: 28px;
-          position: sticky;
-          top: 88px;
-        }
-
-        .qb-sum-head {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 22px;
-        }
-
-        .qb-sum-head h2 {
-          font-size: 20px;
-          font-weight: 800;
-          color: var(--text);
-          margin: 0;
-        }
-
-        .qb-cnt {
-          background: var(--accent);
-          color: #fff;
-          font-size: 12px;
-          font-weight: 800;
-          padding: 3px 10px;
-          border-radius: 20px;
-        }
-
-        .qb-items-list { max-height:250px; overflow-y:auto; margin-bottom:20px; }
-        .qb-items-list::-webkit-scrollbar{ width:3px; }
-        .qb-items-list::-webkit-scrollbar-thumb{ background: var(--border); border-radius:3px; }
-
-        .qb-row {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 10px 0;
-          border-bottom: 1px solid var(--border2);
-        }
-
-        .qb-row:last-child { border-bottom:none; }
-
-        .qb-thumb {
-          width:50px; height:50px;
-          border-radius:10px;
-          object-fit:cover;
-          background: var(--input-bg);
-          flex-shrink:0;
-        }
-
-        .qb-row-info { flex:1; min-width:0; }
-        .qb-row-name { font-size:14px; font-weight:600; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .qb-row-qty { font-size:12px; color: var(--muted); margin-top:3px; }
-        .qb-row-price { font-size:15px; font-weight:700; color: var(--text); }
-
-        hr.qb-hr { border:none; border-top:1px solid var(--border2); margin:16px 0; }
-
-        .qb-sum-row {
-          display:flex; justify-content:space-between;
-          font-size:14px; color: var(--muted); font-weight:500; margin-bottom:8px;
-        }
-
-        .qb-sum-row.big {
-          font-size:22px; font-weight:800; color: var(--text);
-          margin-top:12px; margin-bottom:0;
-        }
-
-        .qb-chip {
-          margin-top:16px;
-          padding:11px 16px;
-          border-radius:12px;
-          font-size:13px;
-          font-weight:700;
-          display:flex;
-          align-items:center;
-          gap:8px;
-        }
-
-        .qb-chip.green {
-          background: var(--chip-dine-bg);
-          border: 1px solid var(--chip-dine-border);
-          color: var(--chip-dine-text);
-        }
-
-        .qb-chip.orange {
-          background: var(--chip-take-bg);
-          border: 1px solid var(--chip-take-border);
-          color: var(--chip-take-text);
-        }
-
-        /* CTA */
-        .qb-btn {
-          width:100%;
-          margin-top:24px;
-          padding:17px;
-          background: var(--accent);
-          color:#fff;
-          border:none;
-          border-radius:14px;
-          font-family:inherit;
-          font-size:16px;
-          font-weight:800;
-          cursor:pointer;
-          transition:all .2s;
-          box-shadow: 0 8px 30px var(--accent-glow);
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          gap:8px;
-          letter-spacing:.3px;
-        }
-
-        .qb-btn:hover:not(:disabled) {
-          background:#ff3d0d;
-          transform:translateY(-2px);
-          box-shadow: 0 12px 36px var(--accent-glow);
-        }
-
-        .qb-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
-
-        .qb-back {
-          display:block; text-align:center;
-          margin-top:14px;
-          font-size:13px; font-weight:600;
-          color: var(--muted); text-decoration:none;
-          transition:color .15s;
-        }
-
-        .qb-back:hover { color: var(--accent); }
-      `}</style>
-
-      <div className="qb-page">
-        <div className="qb-inner">
-
-          <div className="qb-hero">
-            <h1>Check<span>out</span></h1>
-            <div className="qb-live-badge">
-              <span className="qb-live-dot" />
-              {itemCount} item{itemCount !== 1 ? "s" : ""} · Quick Bite Canteen
-            </div>
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+          <div>
+            <span className="text-coral-500 font-bold tracking-widest uppercase text-sm mb-2 block">Secure Checkout</span>
+            <h1 className="text-4xl md:text-5xl font-extrabold font-display text-gray-900 dark:text-white tracking-tight">
+              Complete your <span className="text-transparent bg-clip-text bg-gradient-to-r from-coral-400 to-coral-600">Order</span>
+            </h1>
           </div>
+          <div className="glass px-5 py-2.5 rounded-full flex items-center gap-3 backdrop-blur-md shadow-sm border border-coral-100 dark:border-dark-border">
+            <span className="w-2.5 h-2.5 rounded-full bg-coral-500 animate-pulse"></span>
+            <span className="text-sm font-bold text-gray-700 dark:text-gray-300">
+              {itemCount} item{itemCount !== 1 ? "s" : ""} · Quick Bite
+            </span>
+          </div>
+        </div>
 
-          <div className="qb-layout">
-            <div>
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          {/* Main Checkout Form */}
+          <div className="lg:col-span-8 space-y-6">
 
-              {/* Dining type */}
-              <div className="qb-card">
-                <p className="qb-card-title">How are you dining</p>
-                <div className="qb-toggle">
-                  <button className={`qb-tab ${orderType === ORDER_TYPE.DINE_IN ? "on" : ""}`}
-                    onClick={() => setOrderType(ORDER_TYPE.DINE_IN)}>
-                    🪑 Dine In
-                  </button>
-                  <button className={`qb-tab ${orderType === ORDER_TYPE.TAKEAWAY ? "on" : ""}`}
-                    onClick={() => setOrderType(ORDER_TYPE.TAKEAWAY)}>
-                    🥡 Takeaway
-                  </button>
+            {/* Dining Type */}
+            <div className="glass-card p-6 md:p-8">
+              <h3 className="font-display font-bold text-xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-coral-50 dark:bg-coral-900/30 text-coral-500 flex items-center justify-center text-sm">1</span>
+                How are you dining?
+              </h3>
+              
+              <div className="flex bg-gray-50 dark:bg-[#18181A] rounded-2xl p-1.5 border border-gray-100 dark:border-dark-border mb-8">
+                <button 
+                  className={`flex-1 py-3.5 rounded-xl font-bold transition-all shadow-sm ${orderType === ORDER_TYPE.DINE_IN ? "bg-white dark:bg-dark-card text-coral-500 shadow-sm" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white shadow-none"}`}
+                  onClick={() => setOrderType(ORDER_TYPE.DINE_IN)}
+                >
+                  🪑 Dine In
+                </button>
+                <button 
+                  className={`flex-1 py-3.5 rounded-xl font-bold transition-all shadow-sm ${orderType === ORDER_TYPE.TAKEAWAY ? "bg-white dark:bg-dark-card text-coral-500 shadow-sm" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white shadow-none"}`}
+                  onClick={() => setOrderType(ORDER_TYPE.TAKEAWAY)}
+                >
+                  🥡 Takeaway
+                </button>
+              </div>
+
+              {orderType === ORDER_TYPE.DINE_IN && (
+                <div className="animate-fade-in">
+                  <h4 className="text-sm font-bold tracking-widest text-gray-400 uppercase mb-4">Select your table</h4>
+                  <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-7 gap-3 mb-6">
+                    {Array.from({ length: 20 }, (_, i) => i + 1).map(n => {
+                      const key = String(n);
+                      const isPending  = tableStates.pending.includes(key);
+                      const isOccupied = tableStates.occupied.includes(key);
+                      const isSelected = tableNo === key;
+                      const isBlocked  = isPending || isOccupied;
+
+                      return (
+                        <button key={n}
+                          disabled={isBlocked}
+                          className={`aspect-square rounded-2xl font-bold text-lg transition-all border flex items-center justify-center
+                            ${isOccupied ? "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/30 text-red-500 cursor-not-allowed opacity-50" : 
+                              isPending ? "bg-amber-50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-900/30 text-amber-500 cursor-not-allowed opacity-70" : 
+                              isSelected ? "bg-coral-500 border-coral-500 text-white shadow-lg shadow-coral-500/30 scale-105" : 
+                              "bg-gray-50 dark:bg-[#18181A] border-gray-100 dark:border-dark-border text-gray-600 dark:text-gray-300 hover:border-coral-300 dark:hover:border-coral-700 hover:text-coral-500"}`}
+                          title={isOccupied ? "Occupied" : isPending ? "Pending — awaiting confirmation" : `Table ${n}`}
+                          onClick={() => !isBlocked && setConfirmingTable(key)}>
+                          {isOccupied ? "✕" : isPending ? "⏳" : n}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="flex flex-wrap gap-4 text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-[#18181A] p-4 rounded-2xl border border-gray-100 dark:border-dark-border">
+                    <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-md bg-gray-200 dark:bg-gray-700"></div> Available</span>
+                    <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-md bg-coral-500"></div> Selected</span>
+                    <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-md bg-amber-400 opacity-70"></div> Pending</span>
+                    <span className="flex items-center gap-2"><div className="w-3 h-3 rounded-md bg-red-500 opacity-50"></div> Occupied</span>
+                  </div>
+                  
+                  {tableNo && (
+                    <div className="mt-4 px-4 py-3 bg-coral-50 dark:bg-coral-900/20 border border-coral-200 dark:border-coral-900/30 rounded-xl text-coral-600 dark:text-coral-400 font-bold flex items-center gap-2">
+                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
+                       Table {tableNo} Selected
+                    </div>
+                  )}
                 </div>
+              )}
 
-                {orderType === ORDER_TYPE.DINE_IN && (
-                  <>
-                    <p className="qb-lbl" style={{ marginTop: 22, marginBottom: 0 }}>Select your table</p>
-                    <div className="tbl-grid">
-                      {Array.from({ length: 20 }, (_, i) => i + 1).map(n => {
-                        const key = String(n);
-                        const isPending  = tableStates.pending.includes(key);
-                        const isOccupied = tableStates.occupied.includes(key);
-                        const isSelected = tableNo === key;
-                        const isBlocked  = isPending || isOccupied;
-
-                        let btnStyle = {};
-                        if (isOccupied) btnStyle = { background: "rgba(239,68,68,0.08)", borderColor: "rgba(239,68,68,0.35)", color: "#ef4444", cursor: "not-allowed" };
-                        else if (isPending) btnStyle = { background: "rgba(245,158,11,0.10)", borderColor: "rgba(245,158,11,0.45)", color: "#d97706", cursor: "not-allowed" };
-
-                        return (
-                          <button key={n}
-                            disabled={isBlocked}
-                            className={`tbl-btn ${isSelected ? "on" : ""}`}
-                            style={btnStyle}
-                            title={isOccupied ? "Occupied" : isPending ? "Pending — awaiting confirmation" : `Table ${n}`}
-                            onClick={() => !isBlocked && setConfirmingTable(key)}>
-                            {isOccupied ? "✕" : isPending ? "⏳" : n}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {/* Legend */}
-                    <div style={{ display: "flex", gap: 14, marginTop: 12, fontSize: 12, color: "var(--muted)", flexWrap: "wrap" }}>
-                      {[
-                        { color: "var(--accent)",           label: "Available" },
-                        { color: "rgba(245,158,11,0.45)",   label: "Pending" },
-                        { color: "rgba(239,68,68,0.35)",    label: "Occupied" },
-                      ].map(({ color, label }) => (
-                        <span key={label} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                          <span style={{ width: 12, height: 12, borderRadius: 3, background: color, display: "inline-block" }} />
-                          {label}
-                        </span>
-                      ))}
-                    </div>
-
-                    {tableNo && <div className="tbl-selected">✓ Table {tableNo} selected</div>}
-                  </>
-                )}
-
-                {/* ── Table Confirmation Modal ── */}
-                {confirmingTable && (
-                  <div style={{
-                    position: "fixed", inset: 0, zIndex: 1000,
-                    background: "rgba(0,0,0,0.55)", backdropFilter: "blur(4px)",
-                    display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
-                  }} onClick={() => setConfirmingTable(null)}>
-                    <div style={{
-                      background: "var(--surface)", border: "1px solid var(--border)",
-                      borderRadius: 20, padding: "32px 28px", maxWidth: 340, width: "100%",
-                      textAlign: "center", boxShadow: "0 24px 60px rgba(0,0,0,0.3)",
-                    }} onClick={e => e.stopPropagation()}>
-                      <div style={{ fontSize: 48, marginBottom: 12 }}>🪑</div>
-                      <h3 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 800, color: "var(--text)" }}>
-                        Table {confirmingTable}
-                      </h3>
-                      <p style={{ color: "var(--muted)", fontSize: 14, margin: "0 0 24px" }}>
-                        Confirm this table for your dine-in order?
-                      </p>
-                      <div style={{ display: "flex", gap: 10 }}>
-                        <button
-                          onClick={() => setConfirmingTable(null)}
-                          style={{
-                            flex: 1, padding: "12px", borderRadius: 12,
-                            border: "1px solid var(--border)", background: "var(--input-bg)",
-                            color: "var(--muted)", fontFamily: "inherit", fontSize: 15,
-                            fontWeight: 700, cursor: "pointer",
-                          }}>
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => { setTableNo(confirmingTable); setConfirmingTable(null); }}
-                          style={{
-                            flex: 1, padding: "12px", borderRadius: 12,
-                            border: "none", background: "var(--accent)",
-                            color: "#fff", fontFamily: "inherit", fontSize: 15,
-                            fontWeight: 700, cursor: "pointer",
-                            boxShadow: "0 4px 20px rgba(255,92,43,0.35)",
-                          }}>
-                          ✓ Confirm
-                        </button>
-                      </div>
+              {/* Table Confirmation Modal */}
+              {confirmingTable && (
+                <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in" onClick={() => setConfirmingTable(null)}>
+                  <div className="bg-white dark:bg-dark-card border border-white/20 dark:border-dark-border rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl animate-slide-up" onClick={e => e.stopPropagation()}>
+                    <div className="text-6xl mb-4">🪑</div>
+                    <h3 className="text-3xl font-display font-extrabold text-gray-900 dark:text-white mb-2">Table {confirmingTable}</h3>
+                    <p className="text-gray-500 dark:text-gray-400 font-medium mb-8">Confirm this table for your dine-in order?</p>
+                    <div className="flex gap-4">
+                      <button onClick={() => setConfirmingTable(null)} className="flex-1 py-3.5 rounded-xl font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-[#18181A] hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+                        Cancel
+                      </button>
+                      <button onClick={() => { setTableNo(confirmingTable); setConfirmingTable(null); }} className="flex-1 py-3.5 rounded-xl font-bold text-white bg-coral-500 shadow-lg shadow-coral-500/30 hover:bg-coral-600 transition-colors">
+                        Confirm
+                      </button>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
 
-                {orderType === ORDER_TYPE.TAKEAWAY && (
-                  <div style={{ marginTop: 20 }}>
-                    <label className="qb-lbl">When do you need it?</label>
-                    <div style={{
-                      display: "flex", alignItems: "center", gap: 16, marginTop: 8,
-                      background: "var(--input-bg)", border: "1px solid var(--border)",
-                      borderRadius: 14, padding: "14px 20px"
-                    }}>
-                      <button
+              {orderType === ORDER_TYPE.TAKEAWAY && (
+                <div className="animate-fade-in mt-6">
+                  <h4 className="text-sm font-bold tracking-widest text-gray-400 uppercase mb-4">When do you need it?</h4>
+                  <div className="flex items-center gap-6 bg-gray-50 dark:bg-[#18181A] border border-gray-100 dark:border-dark-border rounded-2xl p-6">
+                     <button
                         onClick={() => setReadyInMin(m => Math.max(20, m - 5))}
-                        style={{
-                          width: 40, height: 40, borderRadius: 10, border: "1px solid var(--border)",
-                          background: "var(--surface)", color: "var(--text)", fontSize: 20,
-                          fontWeight: 700, cursor: "pointer", flexShrink: 0,
-                          display: "flex", alignItems: "center", justifyContent: "center"
-                        }}>−</button>
-                      <div style={{ flex: 1, textAlign: "center" }}>
-                        <div style={{ fontSize: 32, fontWeight: 800, color: "var(--accent)", lineHeight: 1 }}>
-                          {readyInMin} min
-                        </div>
-                        <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
+                        className="w-12 h-12 rounded-xl border border-gray-200 dark:border-dark-border bg-white dark:bg-dark-card flex items-center justify-center text-gray-600 dark:text-gray-300 text-2xl font-bold hover:text-coral-500 hover:border-coral-300 transition-colors shadow-sm"
+                     >−</button>
+                     <div className="flex-1 text-center">
+                        <div className="font-display font-extrabold text-4xl text-coral-500 mb-1">{readyInMin} <span className="text-xl">min</span></div>
+                        <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Ready by {new Date(Date.now() + readyInMin * 60 * 1000).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
                         </div>
-                      </div>
-                      <button
+                     </div>
+                     <button
                         onClick={() => setReadyInMin(m => Math.min(60, m + 5))}
-                        style={{
-                          width: 40, height: 40, borderRadius: 10, border: "1px solid var(--border)",
-                          background: "var(--surface)", color: "var(--text)", fontSize: 20,
-                          fontWeight: 700, cursor: "pointer", flexShrink: 0,
-                          display: "flex", alignItems: "center", justifyContent: "center"
-                        }}>+</button>
-                    </div>
-                    <p style={{ fontSize: 11, color: "var(--subtle)", marginTop: 6 }}>
-                      Adjust in 5-min steps · 10 – 60 min
-                    </p>
+                        className="w-12 h-12 rounded-xl border border-gray-200 dark:border-dark-border bg-white dark:bg-dark-card flex items-center justify-center text-gray-600 dark:text-gray-300 text-2xl font-bold hover:text-coral-500 hover:border-coral-300 transition-colors shadow-sm"
+                     >+</button>
                   </div>
-                )}
-              </div>
-
-              {/* Contact */}
-              <div className="qb-card">
-                <p className="qb-card-title">Your details</p>
-                <div className="qb-2col">
-                  <div className="qb-field">
-                    <label className="qb-lbl">Full Name</label>
-                    <input name="name" value={formData.name} onChange={handle}
-                      placeholder="Your name" className="qb-input" />
-                  </div>
-                  <div className="qb-field">
-                    <label className="qb-lbl">Phone</label>
-                    <PhoneInput value={formData.phone}
-                      onChange={v => setFormData(p => ({ ...p, phone: v }))} />
-                  </div>
+                  <p className="text-xs font-bold text-gray-400 mt-3 text-center">Adjust in 5-min steps (10 – 60 min)</p>
                 </div>
-                <div className="qb-field">
-                  <label className="qb-lbl">Email</label>
-                  <input name="email" value={formData.email} readOnly className="qb-input" />
+              )}
+            </div>
+
+            {/* Contact */}
+            <div className="glass-card p-6 md:p-8">
+               <h3 className="font-display font-bold text-xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-coral-50 dark:bg-coral-900/30 text-coral-500 flex items-center justify-center text-sm">2</span>
+                Your details
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-2 block">Full Name</label>
+                  <input name="name" value={formData.name} onChange={handle} placeholder="John Doe" className="input-field" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-2 block">Phone Number</label>
+                  <PhoneInput value={formData.phone} onChange={v => setFormData(p => ({ ...p, phone: v }))} />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-2 block">Email Address</label>
+                  <input name="email" value={formData.email} readOnly className="input-field opacity-60 cursor-not-allowed" />
                 </div>
               </div>
+            </div>
 
-              {/* Payment */}
-              <div className="qb-card">
-                <p className="qb-card-title">Payment method</p>
-                <div className="pay-row">
-                  {[
+            {/* Payment & Notes */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="glass-card p-6 md:p-8">
+                 <h3 className="font-display font-bold text-xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-full bg-coral-50 dark:bg-coral-900/30 text-coral-500 flex items-center justify-center text-sm">3</span>
+                  Payment
+                </h3>
+                
+                <div className="space-y-3">
+                   {[
                     { k: "Cash", icon: "💵" },
                     { k: "UPI", icon: "📱", off: true },
                     { k: "Card", icon: "💳", off: true },
                   ].map(({ k, icon, off }) => (
                     <button key={k}
-                      className={`pay-opt ${formData.payMethod === k ? "pay-on" : ""} ${off ? "pay-off" : ""}`}
+                      className={`w-full flex items-center p-4 rounded-2xl border transition-all ${off ? "opacity-40 cursor-not-allowed bg-gray-50 border-gray-100 dark:bg-[#18181A] dark:border-dark-border" : formData.payMethod === k ? "border-coral-500 bg-coral-50 dark:bg-coral-900/10 shadow-sm" : "border-gray-200 dark:border-dark-border bg-white dark:bg-dark-card hover:border-coral-300"}`}
                       onClick={() => !off && setFormData(p => ({ ...p, payMethod: k }))}>
-                      <span className="pay-ico">{icon}</span>
-                      <div className="pay-lbl">{k}</div>
-                      {off && <div className="pay-sub">Coming soon</div>}
+                      <span className="text-3xl mr-4">{icon}</span>
+                      <div className="text-left flex-1">
+                        <div className={`font-bold ${formData.payMethod === k ? "text-coral-600 dark:text-coral-400" : "text-gray-900 dark:text-white"}`}>{k}</div>
+                        {off && <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">Coming Soon</div>}
+                      </div>
+                      {!off && formData.payMethod === k && (
+                        <div className="w-5 h-5 rounded-full bg-coral-500 text-white flex items-center justify-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5"><path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" /></svg>
+                        </div>
+                      )}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Notes */}
-              <div className="qb-card">
-                <p className="qb-card-title">Kitchen notes — optional</p>
-                <textarea name="note" value={formData.note} onChange={handle}
-                  placeholder="Allergies, no onions, extra spicy…" className="qb-input" />
+              <div className="glass-card p-6 md:p-8 flex flex-col">
+                 <h3 className="font-display font-bold text-xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                  <span className="text-2xl">📝</span>
+                  Kitchen Notes
+                </h3>
+                <textarea 
+                  name="note" 
+                  value={formData.note} 
+                  onChange={handle}
+                  placeholder="Any allergy? Less spicy? No onions? Let the chef know..." 
+                  className="input-field flex-1 min-h-[140px] resize-none pb-4" 
+                />
               </div>
-
             </div>
 
-            {/* Summary */}
-            <div>
-              <div className="qb-summary">
-                <div className="qb-sum-head">
-                  <h2>Order Summary</h2>
-                  <span className="qb-cnt">{itemCount}</span>
-                </div>
+          </div>
 
-                <div className="qb-items-list">
-                  {items.length === 0
-                    ? <p style={{ color: "var(--subtle)", textAlign: "center", padding: "20px 0", fontSize: 14 }}>Cart is empty</p>
-                    : items.map(item => (
-                      <div key={item.id} className="qb-row">
-                        <img src={item.img} alt={item.name} className="qb-thumb"
-                          onError={e => e.target.style.display = "none"} />
-                        <div className="qb-row-info">
-                          <div className="qb-row-name">{item.name}</div>
-                          <div className="qb-row-qty">{item.qty} × ₹{item.price}</div>
-                        </div>
-                        <div className="qb-row-price">₹{item.qty * item.price}</div>
+          {/* Order Summary Sidebar */}
+          <div className="lg:col-span-4">
+            <div className="glass-card p-6 sticky top-28">
+              <h2 className="font-display font-bold text-2xl text-gray-900 dark:text-white mb-6 pb-4 border-b border-gray-100 dark:border-dark-border flex justify-between items-center">
+                Order Summary
+                <span className="bg-coral-100 dark:bg-coral-900/30 text-coral-600 dark:text-coral-400 text-sm py-1 px-3 rounded-full">{itemCount} items</span>
+              </h2>
+
+              <div className="max-h-[300px] overflow-y-auto pr-2 mb-6 space-y-4 custom-scrollbar">
+                {items.length === 0 ? (
+                  <p className="text-gray-500 text-center py-4 font-medium">Your cart is empty</p>
+                ) : (
+                  items.map(item => (
+                    <div key={item.id} className="flex items-center gap-4">
+                      <img src={item.img} alt={item.name} className="w-14 h-14 rounded-xl object-cover bg-gray-100 dark:bg-dark-border" onError={e => e.target.style.display = "none"} />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-gray-900 dark:text-white truncate">{item.name}</div>
+                        <div className="text-sm text-gray-500 font-medium mt-0.5">{item.qty} × ₹{item.price}</div>
                       </div>
-                    ))
-                  }
-                </div>
-
-                <hr className="qb-hr" />
-                <div className="qb-sum-row"><span>Subtotal</span><span>₹{total.toFixed(2)}</span></div>
-                <div className="qb-sum-row"><span>GST (5%)</span><span>₹{tax.toFixed(2)}</span></div>
-                <div className="qb-sum-row big"><span>Total</span><span>₹{finalAmount.toFixed(2)}</span></div>
-
-                {orderType === ORDER_TYPE.DINE_IN && tableNo
-                  ? <div className="qb-chip green">🪑 Table {tableNo} · Dine In</div>
-                  : orderType === ORDER_TYPE.TAKEAWAY
-                  ? <div className="qb-chip orange">🥡 Takeaway · {formData.payMethod}</div>
-                  : null
-                }
-
-                <button className="qb-btn" onClick={placeOrder} disabled={placing}>
-                  {placing ? "Placing…" : "Place Order →"}
-                </button>
-                <Link to="/menu" className="qb-back">← Back to menu</Link>
+                      <div className="font-extrabold text-gray-900 dark:text-white">₹{item.qty * item.price}</div>
+                    </div>
+                  ))
+                )}
               </div>
+
+              <div className="pt-4 border-t border-gray-100 dark:border-dark-border space-y-3 mb-6">
+                <div className="flex justify-between text-gray-600 dark:text-gray-400 font-medium">
+                  <span>Subtotal</span><span>₹{total.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-600 dark:text-gray-400 font-medium">
+                  <span>GST (5%)</span><span>₹{tax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-xl font-extrabold text-gray-900 dark:text-white pt-3 mt-3 border-t border-gray-100 dark:border-dark-border">
+                  <span>Total To Pay</span><span className="text-coral-500">₹{finalAmount.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <button 
+                className={`w-full py-4 text-lg justify-center font-bold rounded-xl transition-all shadow-lg flex items-center gap-2 ${placing ? "bg-gray-400 cursor-wait shadow-none" : "btn-primary shadow-coral-500/40"}`} 
+                onClick={placeOrder} 
+                disabled={placing}
+              >
+                {placing ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Placing Order...
+                  </>
+                ) : (
+                  <>Confirm & Pay ₹{finalAmount.toFixed(2)} <span className="text-xl leading-none">→</span></>
+                )}
+              </button>
+              
+              <Link to="/cart" className="block text-center text-gray-500 font-bold hover:text-coral-500 transition-colors mt-6">
+                ← Back to Cart
+              </Link>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 }
