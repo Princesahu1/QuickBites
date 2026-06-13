@@ -2,18 +2,6 @@ services:
   - type: web
     name: pos-backend
     runtime: java
+    rootDir: backend-java
     buildCommand: mvn clean package -DskipTests
     startCommand: java -jar target/*.jar
-    envVars:
-      - key: MYSQL_HOST
-        value: b9hzgtb2xsyo5konrzhg-mysql.services.clever-cloud.com
-      - key: MYSQL_PORT
-        value: "3306"
-      - key: MYSQL_DB
-        value: b9hzgtb2xsyo5konrzhg
-      - key: MYSQL_USER
-        value: ujh9ssuxddvj2pmb
-      - key: MYSQL_PASSWORD
-        sync: false
-      - key: PORT
-        value: "8080"
