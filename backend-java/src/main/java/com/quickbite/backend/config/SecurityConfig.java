@@ -82,21 +82,19 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "https://quick-bites-k1peopxo9-princesahu1s-projects.vercel.app",
-    "https://quickbites.vercel.app"
-));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "x-auth-token"));
-        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+  @Bean
+public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOriginPatterns(Arrays.asList(
+        "http://localhost:*",
+        "https://*.vercel.app"
+    ));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "x-auth-token", "*"));
+    configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+}
 }
